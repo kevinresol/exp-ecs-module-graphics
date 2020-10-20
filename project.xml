@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project>
+
+	<meta title="RunTest" package="com.sample.test" version="1.0.0" company="Company Name" />
+	<app main="OpenflTest" path="bin" file="RunTest" />
+	<window background="#000000"/>
+
+	<source path="tests" />
+
+	<haxelib name="openfl" />
+	<haxelib name="exp-ecs-module-graphics" />
+	<haxelib name="exp-ecs-module-geometry" />
+	<haxelib name="exp-ecs-module-transform" />
+
+	<!-- <assets path="assets" rename="assets" /> -->
+
+
+	<haxeflag name="-dce" value="full"/>
+	<haxeflag name="-D" value="analyzer-optimize"/>
+
+</project>

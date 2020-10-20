@@ -1,0 +1,9 @@
+-cp tests
+-main RunTests
+-dce full
+
+-lib tink_unittest
+-lib openfl
+
+-D analyzer-optimize
+-D loop_unroll_max_cost=2500
