@@ -4,6 +4,8 @@ import exp.ecs.module.geometry.component.*;
 import exp.ecs.module.graphics.component.*;
 import exp.ecs.module.transform.component.*;
 
+using kha.graphics2.GraphicsExtension;
+
 private typedef Components = {
 	final transform:Transform2;
 	final rectangle:Rectangle;
@@ -21,17 +23,22 @@ class RenderGeometry2 extends System {
 
 	public var frame:kha.Framebuffer;
 
+	final list:NodeList<Components>;
 	var nodes:Array<Node<Components>>;
 
-	public function new(nodes:NodeList<Components>) {
-		nodes.bind(v -> this.nodes = v, tink.state.Scheduler.direct);
+	public function new(list) {
+		this.list = list;
 	}
 
-	static var printed = false;
+	override function initialize() {
+		return list.bind(v -> nodes = v, tink.state.Scheduler.direct);
+	}
 
 	override function update(dt:Float) {
 		final g2 = frame.g2;
-		g2.begin(true, kha.Color.fromBytes(0, 95, 106));
+		// g2.begin(true, kha.Color.fromBytes(0, 95, 106));
+		g2.begin(false);
+
 		for (node in nodes) {
 			final transform = node.components.transform.global;
 
@@ -42,12 +49,7 @@ class RenderGeometry2 extends System {
 				transform.m02, transform.m12, transform.m22
 				// @formatter:on
 			);
-			g2.color = switch node.components.color {
-				case null:
-					kha.Color.Red;
-				case {value: color}:
-					color;
-			}
+			g2.color = node.components.color.value;
 
 			switch node.components.rectangle {
 				case null:
@@ -59,16 +61,7 @@ class RenderGeometry2 extends System {
 			switch node.components.circle {
 				case null:
 				case {radius: radius}:
-					var x1 = COS_TABLE[0] * radius;
-					var y1 = SIN_TABLE[0] * radius;
-					for (i in 0...32) {
-						final index = (i + 1) % 32;
-						final x2 = COS_TABLE[index] * radius;
-						final y2 = SIN_TABLE[index] * radius;
-						g2.drawLine(x1, y1, x2, y2, 2);
-						x1 = x2;
-						y1 = y2;
-					}
+					g2.drawCircle(0, 0, radius, 2, 8);
 					g2.drawLine(0, 0, 0, -radius, 2); // indicate upright direction
 			}
 		}
@@ -77,7 +70,7 @@ class RenderGeometry2 extends System {
 
 	public static function getNodes(world:World) {
 		// @formatter:off
-		return NodeList.generate(world, @:field(transform) Transform2 && (Rectangle || Circle) && ~Color);
+		return NodeList.generate(world, @:field(transform) Transform2 && (Rectangle || Circle) && Color);
 		// @formatter:on
 	}
 }
