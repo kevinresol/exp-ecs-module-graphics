@@ -23,19 +23,19 @@ class RenderGeometry2 extends SingleListSystem<Components> {
 
 	override function update(dt:Float) {
 		final g2 = frame.g2;
-		// g2.begin(true, kha.Color.fromBytes(0, 95, 106));
+
 		g2.begin(false);
+		final g2transform = g2.transformation;
 
 		for (node in nodes) {
 			final transform = node.components.transform.global;
 
-			g2.transformation = new kha.math.FastMatrix3(
-				// @formatter:off
-				transform.m00, transform.m10, transform.m20,
-				transform.m01, transform.m11, transform.m21,
-				transform.m02, transform.m12, transform.m22
-				// @formatter:on
-			);
+			// @formatter:off
+			g2transform._00 = transform.m00; g2transform._10 = transform.m10; g2transform._20 = transform.m20;
+			g2transform._01 = transform.m01; g2transform._11 = transform.m11; g2transform._21 = transform.m21;
+			g2transform._02 = transform.m02; g2transform._12 = transform.m12; g2transform._22 = transform.m22;
+			
+			// @formatter:on
 			g2.color = node.components.color.value;
 
 			switch node.components.rectangle {
