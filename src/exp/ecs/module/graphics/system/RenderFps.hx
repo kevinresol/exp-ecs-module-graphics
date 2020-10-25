@@ -8,10 +8,13 @@ import kha.Scheduler;
 @:nullSafety(Off)
 class RenderFps extends System {
 	public var frame:kha.Framebuffer;
+	public var font:kha.Font;
 
 	var time = Scheduler.time();
 
-	public function new() {}
+	public function new(font) {
+		this.font = font;
+	}
 
 	override function update(dt:Float) {
 		final g2 = frame.g2;
@@ -21,8 +24,8 @@ class RenderFps extends System {
 		time = now;
 
 		g2.begin(false);
+		g2.font = font;
 		g2.transformation.setFrom(kha.math.FastMatrix3.identity());
-		g2.font = kha.Assets.fonts.kenney_mini;
 		g2.color = kha.Color.Black;
 		g2.drawString(fps, 11, 11);
 		g2.color = kha.Color.White;
