@@ -1,5 +1,6 @@
 package exp.ecs.module.graphics.system;
 
+import exp.ecs.system.*;
 import exp.ecs.module.geometry.component.*;
 import exp.ecs.module.graphics.component.*;
 import exp.ecs.module.transform.component.*;
@@ -17,22 +18,8 @@ private typedef Components = {
  * Render 2D geometries
  */
 @:nullSafety(Off)
-class RenderGeometry2 extends System {
-	static final SIN_TABLE = [for (i in 0...32) Math.sin(Math.PI * 2 * i / 32)];
-	static final COS_TABLE = [for (i in 0...32) Math.cos(Math.PI * 2 * i / 32)];
-
+class RenderGeometry2 extends SingleListSystem<Components> {
 	public var frame:kha.Framebuffer;
-
-	final list:NodeList<Components>;
-	var nodes:Array<Node<Components>>;
-
-	public function new(list) {
-		this.list = list;
-	}
-
-	override function initialize() {
-		return list.bind(v -> nodes = v, tink.state.Scheduler.direct);
-	}
 
 	override function update(dt:Float) {
 		final g2 = frame.g2;
