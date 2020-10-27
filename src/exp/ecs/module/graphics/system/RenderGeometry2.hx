@@ -55,9 +55,9 @@ class RenderGeometry2 extends SingleListSystem<Components> {
 		g2.end();
 	}
 
-	public static function getNodes(world:World) {
+	public static function getSpec() {
 		// @formatter:off
-		return NodeList.generate(world, @:component(transform) Transform2 && (Rectangle || Circle) && Color);
+		return NodeList.spec(@:component(transform) Transform2 && (Rectangle || Circle) && Color);
 		// @formatter:on
 	}
 }
