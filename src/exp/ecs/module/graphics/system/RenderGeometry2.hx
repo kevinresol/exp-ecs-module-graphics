@@ -11,6 +11,7 @@ private typedef Components = {
 	final transform:Transform2;
 	final rectangle:Rectangle;
 	final circle:Circle;
+	final polygon:Polygon;
 	final color:Color;
 }
 
@@ -51,13 +52,21 @@ class RenderGeometry2 extends SingleListSystem<Components> {
 					g2.drawCircle(0, 0, radius, 2, 8);
 					g2.drawLine(0, 0, 0, -radius, 2); // indicate upright direction
 			}
+
+			switch node.components.polygon {
+				case null:
+				case {vertices: vertices}:
+					final v = vertices[0];
+					g2.drawLine(0, 0, v.x, v.y, 2); // point to first vertex to indicate rotation
+					g2.drawPolygon(0, 0, vertices, 2);
+			}
 		}
 		g2.end();
 	}
 
 	public static function getSpec() {
 		// @formatter:off
-		return NodeList.spec(@:component(transform) Transform2 && (Rectangle || Circle) && Color);
+		return NodeList.spec(@:component(transform) Transform2 && (Rectangle || Circle || Polygon) && Color);
 		// @formatter:on
 	}
 }
