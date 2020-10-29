@@ -29,7 +29,7 @@ class RenderGeometry2 extends SingleListSystem<Components> {
 		final g2transform = g2.transformation;
 
 		for (node in nodes) {
-			final transform = node.components.transform.global;
+			final transform = node.data.transform.global;
 
 			// @formatter:off
 			g2transform._00 = transform.m00; g2transform._10 = transform.m10; g2transform._20 = transform.m20;
@@ -37,23 +37,23 @@ class RenderGeometry2 extends SingleListSystem<Components> {
 			g2transform._02 = transform.m02; g2transform._12 = transform.m12; g2transform._22 = transform.m22;
 			
 			// @formatter:on
-			g2.color = node.components.color.value;
+			g2.color = node.data.color.value;
 
-			switch node.components.rectangle {
+			switch node.data.rectangle {
 				case null:
 				case rectangle:
 					g2.drawRect(-rectangle.width / 2, -rectangle.height / 2, rectangle.width, rectangle.height, 2);
 					g2.drawLine(0, 0, 0, -rectangle.height / 2, 2); // indicate upright direction
 			}
 
-			switch node.components.circle {
+			switch node.data.circle {
 				case null:
 				case {radius: radius}:
 					g2.drawCircle(0, 0, radius, 2, 8);
 					g2.drawLine(0, 0, 0, -radius, 2); // indicate upright direction
 			}
 
-			switch node.components.polygon {
+			switch node.data.polygon {
 				case null:
 				case {vertices: vertices}:
 					final v = vertices[0];
