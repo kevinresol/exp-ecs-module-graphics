@@ -12,8 +12,6 @@ class RenderFps extends System {
 	public var x:Int;
 	public var y:Int;
 
-	var time = Scheduler.time();
-
 	public function new(font, x, y) {
 		this.font = font;
 		this.x = x;
@@ -22,10 +20,7 @@ class RenderFps extends System {
 
 	override function update(dt:Float) {
 		final g2 = frame.g2;
-
-		final now = Scheduler.time();
-		final fps = 'FPS: ${Math.round(1 / (now - time))}';
-		time = now;
+		final fps = 'FPS: ${Math.round(1 / dt)}';
 
 		g2.begin(false);
 		g2.font = font;
