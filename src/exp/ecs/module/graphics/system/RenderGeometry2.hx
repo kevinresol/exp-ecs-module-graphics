@@ -22,6 +22,10 @@ private typedef Components = {
 class RenderGeometry2 extends SingleListSystem<Components> {
 	public var frame:kha.Framebuffer;
 
+	public function new() {
+		super(NodeList.spec(@:component(transform) Transform2 && (Rectangle || Circle || Polygon) && Color));
+	}
+
 	override function update(dt:Float) {
 		final g2 = frame.g2;
 
@@ -62,11 +66,5 @@ class RenderGeometry2 extends SingleListSystem<Components> {
 			}
 		}
 		g2.end();
-	}
-
-	public static function getSpec() {
-		// @formatter:off
-		return NodeList.spec(@:component(transform) Transform2 && (Rectangle || Circle || Polygon) && Color);
-		// @formatter:on
 	}
 }
