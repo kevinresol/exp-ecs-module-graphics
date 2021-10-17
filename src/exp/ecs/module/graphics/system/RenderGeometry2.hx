@@ -5,7 +5,13 @@ import exp.ecs.module.geometry.component.*;
 import exp.ecs.module.graphics.component.*;
 import exp.ecs.module.transform.component.*;
 
+#if kha
 using kha.graphics2.GraphicsExtension;
+
+private typedef Context = {
+	g2:kha.graphics2.Graphics,
+}
+#end
 
 private typedef Components = {
 	final transform:Transform2;
@@ -20,14 +26,16 @@ private typedef Components = {
  */
 @:nullSafety(Off)
 class RenderGeometry2 extends SingleListSystem<Components> {
-	public var frame:kha.Framebuffer;
+	public var context:Context;
 
-	public function new() {
+	public function new(context) {
 		super(NodeList.spec(@:component(transform) Transform2 && (Rectangle || Circle || Polygon) && Color));
+		this.context = context;
 	}
 
 	override function update(dt:Float) {
-		final g2 = frame.g2;
+		#if kha
+		final g2 = context.g2;
 
 		g2.begin(false);
 		final g2transform = g2.transformation;
@@ -47,14 +55,14 @@ class RenderGeometry2 extends SingleListSystem<Components> {
 				case null:
 				case rectangle:
 					g2.drawRect(-rectangle.width / 2, -rectangle.height / 2, rectangle.width, rectangle.height, 2);
-					g2.drawLine(0, 0, 0, -rectangle.height / 2, 2); // indicate upright direction
+					g2.drawLine(0, 0, rectangle.width / 2, 0, 2); // point towards angle = 0
 			}
 
 			switch node.data.circle {
 				case null:
 				case {radius: radius}:
 					g2.drawCircle(0, 0, radius, 2, 8);
-					g2.drawLine(0, 0, 0, -radius, 2); // indicate upright direction
+					g2.drawLine(0, 0, radius, 0, 2); // point towards angle = 0
 			}
 
 			switch node.data.polygon {
@@ -66,5 +74,6 @@ class RenderGeometry2 extends SingleListSystem<Components> {
 			}
 		}
 		g2.end();
+		#end
 	}
 }
