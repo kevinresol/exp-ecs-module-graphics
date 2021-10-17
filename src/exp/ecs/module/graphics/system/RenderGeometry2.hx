@@ -61,7 +61,7 @@ class RenderGeometry2 extends SingleListSystem<Components> {
 			switch node.data.circle {
 				case null:
 				case {radius: radius}:
-					g2.drawCircle(0, 0, radius, 2, 8);
+					g2.drawCircle(0, 0, radius, 2, 32);
 					g2.drawLine(0, 0, radius, 0, 2); // point towards angle = 0
 			}
 
