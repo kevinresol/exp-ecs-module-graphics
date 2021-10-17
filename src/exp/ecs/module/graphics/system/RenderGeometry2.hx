@@ -68,9 +68,13 @@ class RenderGeometry2 extends SingleListSystem<Components> {
 			switch node.data.polygon {
 				case null:
 				case {vertices: vertices}:
-					final v = vertices[0];
-					g2.drawLine(0, 0, v.x, v.y, 2); // point to first vertex to indicate rotation
-					g2.drawPolygon(0, 0, vertices, 2);
+					if (vertices.length > 0) {
+						final v = vertices[0];
+						g2.drawLine(0, 0, v.x, v.y, 2); // point to first vertex to indicate rotation
+						g2.drawPolygon(0, 0, vertices, 2);
+					} else {
+						// consider throwing something for debug purpose
+					}
 			}
 		}
 		g2.end();
