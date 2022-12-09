@@ -15,9 +15,10 @@ private typedef Context = {
 }
 #end
 
-private typedef CameraComponents = {
+private typedef ScreenComponents = {
+	final screen:Screen2;
 	final camera:Camera2;
-	final ?transform:Transform2;
+	final cameraTransform:Transform2;
 }
 
 private typedef Components = {
@@ -29,12 +30,17 @@ private typedef Components = {
 }
 
 private typedef Specs = {
-	final cameras:NodeListSpec<CameraComponents>;
+	final screens:NodeListSpec<ScreenComponents>;
 	final nodes:NodeListSpec<Components>;
 }
 
 /**
- * Render 2D geometries
+	Render 2D geometries
+
+	To render, you need a screen entity containing the Screen2 component, which defines where, on the screen, to render the visuals.
+	This screen entity must be linked to a camera entity (via the key "camera") which contains Camera2 (which defines the capture area in game world) and Transform2 (transformation of the capture area)
+
+	In other words, you can render the same camera capture area multiple times by attaching multiple screen components to it.
  */
 @:nullSafety(Off)
 class RenderGeometry2 extends System {
@@ -42,22 +48,24 @@ class RenderGeometry2 extends System {
 
 	final specs:Specs;
 
-	var cameras:NodeList<CameraComponents>;
+	var screens:NodeList<ScreenComponents>;
 	var nodes:NodeList<Components>;
 
 	public function new(context:Context) {
 		this.context = context;
 
 		this.specs = {
-			cameras: NodeList.spec(@:component(camera) Camera2 && @:component(transform) ~Transform2),
+			// @formatter:off
+			screens: NodeList.spec(@:component(screen) Screen2 && @:component(camera) Linked('camera', Camera2) && @:component(cameraTransform) Linked('camera', Transform2)),
 			nodes: NodeList.spec(@:component(transform) Transform2 && (Rectangle || Circle || Polygon) && Color),
+			// @formatter:on
 		}
 	}
 
 	override function initialize(world:World) {
 		return
 			// @formatter:off
-			NodeList.make(world, specs.cameras).bind(v -> this.cameras = v, tink.state.Scheduler.direct) & 
+			NodeList.make(world, specs.screens).bind(v -> this.screens = v, tink.state.Scheduler.direct) & 
 			NodeList.make(world, specs.nodes).bind(v -> this.nodes = v, tink.state.Scheduler.direct);
 			// @formatter:on
 	}
@@ -65,22 +73,18 @@ class RenderGeometry2 extends System {
 	override function update(dt:Float) {
 		#if kha
 		final g2 = context.g2;
-		final view = FastMatrix3.identity();
 
 		g2.begin(false);
-		for (camera in cameras) {
-			final window = camera.data.camera.window;
+		for (screen in screens) {
+			final window = screen.data.screen;
 			final projection = FastMatrix3.translation(window.x, window.y);
+			final offset = FastMatrix3.translation(-window.w / 2, -window.h / 2);
+			final view = convertMatrix(screen.data.cameraTransform.global).multmat(offset);
 
-			// NOTE: don't factorize view.setFrom outside the switch, to avoid allocation
-			switch camera.data.transform {
-				case null:
-					view.setFrom(FastMatrix3.identity());
-				case cam:
-					view.setFrom(convertMatrix(cam.global));
-			}
+			// TODO: crop to capture area defined in Camera2
 
-			g2.scissor(Std.int(window.x), Std.int(window.y), Std.int(window.w), Std.int(window.h));
+			g2.scissor(Std.int(window.x - window.w / 2), Std.int(window.y - window.h / 2), Std.int(window.x + window.w / 2), Std.int(window.y + window.h / 2));
+			g2.clear(kha.Color.fromBytes(0, 0, 0));
 
 			for (node in nodes) {
 				final model = convertMatrix(node.data.transform.global);
