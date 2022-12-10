@@ -1,2 +1,4 @@
--cp src
+-cp ${SCOPE_DIR}/src
 -lib exp-ecs
+-lib exp-ecs-module-transform
+-lib exp-ecs-module-geometry

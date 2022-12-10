@@ -10,11 +10,36 @@
 				"$haxe-error",
 				"$haxe-trace"
 			],
+			"group": "build",
+			"label": "Run Test"
+		},
+		{
+			"type": "Kha",
+			"target": "HTML5",
+			"problemMatcher": [
+				"$haxe-absolute",
+				"$haxe",
+				"$haxe-error",
+				"$haxe-trace"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}/examples/geometry/"
+			},
+			"label": "Kha: Build for HTML5",
+			"group": "build"
+		},
+		{
+			"type": "Kha",
+			"target": "Debug HTML5",
+			"problemMatcher": ["$haxe-absolute", "$haxe"],
 			"group": {
 				"kind": "build",
 				"isDefault": true
 			},
-			"label": "Run Test"
+			"options": {
+				"cwd": "${workspaceFolder}/examples/geometry/"
+			},
+			"label": "Kha: Build for Debug HTML5"
 		}
 	]
 }

@@ -1,1 +1,5 @@
--cp ../exp-ecs-module-geometry/src
+-cp ${SCOPE_DIR}/../exp-ecs-module-geometry/src
+
+-lib exp-ecs
+-lib hxmath
+-lib why-unit

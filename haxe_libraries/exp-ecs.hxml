@@ -1,5 +1,5 @@
--cp ../exp-ecs/src
+-cp ${SCOPE_DIR}/../exp-ecs/src
 -D exp-ecs=0.0.0
 -lib tink_macro
 -lib tink_state
-../exp-ecs/extraParams.hxml
+${SCOPE_DIR}/../exp-ecs/extraParams.hxml
