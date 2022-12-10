@@ -1,5 +1,6 @@
--cp ${SCOPE_DIR}/../exp-ecs-module-geometry/src
-
+# @install: lix --silent download "gh://github.com/kevinresol/exp-ecs-module-geometry#3bb4bc97494f4cfac5b4c25009b63f2fd512953e" into exp-ecs-module-geometry/0.0.0/github/3bb4bc97494f4cfac5b4c25009b63f2fd512953e
 -lib exp-ecs
 -lib hxmath
 -lib why-unit
+-cp ${HAXE_LIBCACHE}/exp-ecs-module-geometry/0.0.0/github/3bb4bc97494f4cfac5b4c25009b63f2fd512953e/src
+-D exp-ecs-module-geometry=0.0.0

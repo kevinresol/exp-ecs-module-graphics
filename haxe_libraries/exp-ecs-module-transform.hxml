@@ -1,2 +1,5 @@
--cp ${SCOPE_DIR}/../exp-ecs-module-transform/src
+# @install: lix --silent download "gh://github.com/kevinresol/exp-ecs-module-transform#9f2f90d4ff362ea4f26aa07bc1324d0186f44873" into exp-ecs-module-transform/0.0.0/github/9f2f90d4ff362ea4f26aa07bc1324d0186f44873
+-lib exp-ecs
 -lib hxmath
+-cp ${HAXE_LIBCACHE}/exp-ecs-module-transform/0.0.0/github/9f2f90d4ff362ea4f26aa07bc1324d0186f44873/src
+-D exp-ecs-module-transform=0.0.0
